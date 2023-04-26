@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "43.142.105.160",
+  "port": 3306,
+  "username": "api-admin",
+  "password": "d3epPpLZkieKA8Yx",
+  "database": "api-admin",
+  "entities": ["src/**/**.entity{.ts,.js}"],
+  "synchronize": true
+}

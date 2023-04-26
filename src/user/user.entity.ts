@@ -1,0 +1,38 @@
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { IsEmail, IsPhoneNumber } from 'class-validator';
+//加密算法
+import * as argon2 from 'argon2';
+
+@Entity('user')
+export class UserEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @Column()
+  @IsEmail()
+  email: string;
+
+  @Column({ default: '' })
+  avatar: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  @IsPhoneNumber()
+  phone: number;
+
+  @Column()
+  remember_token: string;
+
+  @Column({ default: 'student' })
+  role: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
+}
