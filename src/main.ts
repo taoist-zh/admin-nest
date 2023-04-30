@@ -16,7 +16,9 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
+  //设置接口文档地址
   SwaggerModule.setup('/docs', app, document);
   await app.listen(3000);
 }
+
 bootstrap();

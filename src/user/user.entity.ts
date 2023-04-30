@@ -11,8 +11,8 @@ export class UserEntity {
   @Column()
   username: string;
 
-  @Column()
-  @IsEmail()
+  @Column({ default: '' })
+  // @IsEmail()
   email: string;
 
   @Column({ default: '' })
@@ -21,15 +21,16 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
-  @IsPhoneNumber()
+  @Column({ default: 0 })
+  // @IsPhoneNumber()
   phone: number;
 
-  @Column()
+  @Column({ default: '' })
   remember_token: string;
 
   @Column({ default: 'student' })
   role: string;
+  user: any;
 
   @BeforeInsert()
   async hashPassword() {
