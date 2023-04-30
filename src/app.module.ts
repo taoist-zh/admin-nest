@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
 import { DeviceModule } from './device/device.module';
 import { CategorizeModule } from './categorize/categorize.module';
+import { ApplyModule } from './apply/apply.module';
 
 @Module({
   imports: [
@@ -21,10 +22,12 @@ import { CategorizeModule } from './categorize/categorize.module';
     UserModule,
     DeviceModule,
     CategorizeModule,
+
+    ApplyModule,
   ],
   controllers: [AppController],
   providers: [],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) { }
+  constructor(private dataSource: DataSource) {}
 }
