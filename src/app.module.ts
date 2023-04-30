@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
+import { DeviceModule } from './device/device.module';
+import { CategorizeModule } from './categorize/categorize.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { UserModule } from './user/user.module';
       synchronize: true,
     }),
     UserModule,
+    DeviceModule,
+    CategorizeModule,
   ],
   controllers: [AppController],
   providers: [],

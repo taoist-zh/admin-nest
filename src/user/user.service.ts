@@ -50,7 +50,7 @@ export class UserService {
     const data = await this.usersRepository.delete({ id });
     if (data.affected == 0) {
       return {
-        code: 200,
+        code: 401,
         message: '用户不存在',
       };
     } else {
