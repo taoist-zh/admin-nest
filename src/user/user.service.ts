@@ -125,7 +125,10 @@ export class UserService {
         };
       }
     } else {
-      console.log('不存在');
+      return {
+        code: 401,
+        message: '用户名不存在',
+      };
     }
   }
   //修改个人信息
