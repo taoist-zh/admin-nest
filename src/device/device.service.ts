@@ -62,8 +62,8 @@ export class DeviceService {
       data: result,
     };
   }
-  async findAll() {
-    const result = await this.deviceRepository.find();
+  async findAll(dto) {
+    const result = await this.deviceRepository.findBy(dto);
     return {
       code: 200,
       meaasge: '查询成功',

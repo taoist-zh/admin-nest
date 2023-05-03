@@ -116,6 +116,7 @@ export class UserService {
           message: '登陆成功',
           data: {
             token: token,
+            userInfo: result[0],
           },
         };
       } else {

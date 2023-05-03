@@ -11,7 +11,7 @@ export class DeviceEntity {
   @Column()
   deviceNumber: string;
 
-  @Column()
+  @Column({ default: '' })
   imgUrl: string;
 
   @Column({ default: '0' })
