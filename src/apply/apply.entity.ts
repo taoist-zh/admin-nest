@@ -19,4 +19,7 @@ export class ApplyEntity {
 
   @Column({ default: '' })
   description: string;
+
+  @Column({ type: 'timestamp' })
+  time: Date;
 }

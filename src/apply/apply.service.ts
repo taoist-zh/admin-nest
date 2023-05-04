@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ApplyEntity } from './apply.entity';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { resourceLimits } from 'worker_threads';
 import { UseEntity } from '../record/use/use.entity';
+import { UserEntity } from '../user/user.entity';
 import { MaintenanceEntity } from '../record/maintenance/maintenance.entity';
 import { UnableUseEntity } from '../record/unable-use/unableUse.entity';
 
@@ -18,6 +19,7 @@ export class ApplyService {
     private maintenanceRepository: Repository<MaintenanceEntity>,
     @InjectRepository(UnableUseEntity)
     private unableUseRepository: Repository<UnableUseEntity>,
+    private connection: Connection,
   ) {}
   async add(dto) {
     return {
@@ -36,14 +38,14 @@ export class ApplyService {
       };
     } else {
       const result = await this.applyRepository.findBy({ id: dto.id });
-      console.log(result);
+      console.log(result,'22222222');
       const data = {
         ...result[0],
-        status: dto.status,
+        applyStatus: dto.applyStatus,
         description: dto.description,
       };
       //如果dto.status=2，需要往使用记录/维修记录/报废表里增加数据
-      if ((dto.status = 2)) {
+      if ((dto.applyStatus = 2)) {
         const { userId, deviceId } = result[0];
         switch (result[0].applyType) {
           case 1:
@@ -82,7 +84,6 @@ export class ApplyService {
             break;
         }
       }
-
       return {
         code: 200,
         message: '更新成功',
@@ -93,10 +94,31 @@ export class ApplyService {
 
   //申请记录
   async applyList(dto) {
+    let where = '';
+    if (Object.keys(dto).length > 0) {
+      where = 'WHERE ';
+      Object.keys(dto).forEach((item, index) => {
+        const and = index == Object.keys(dto).length - 1 ? '' : ' and ';
+        where += 'apply.' + item + '=' + dto[item] + and;
+      });
+    }
+
+    const data = await this.connection.query(`
+    SELECT
+	*,
+	user.username AS username,
+	device.name AS name,
+  device.imgUrl as imgUrl 
+FROM
+	apply
+	LEFT JOIN user ON apply.userId = user.id
+	LEFT JOIN device ON apply.deviceId = device.id 
+  ${where}
+    `);
     return {
       code: 200,
       message: '查询成功',
-      data: await this.applyRepository.findBy(dto),
+      data: data,
     };
   }
 

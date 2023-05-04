@@ -18,6 +18,7 @@ import { ApplyModule } from './apply/apply.module';
       database: 'api-admin',
       autoLoadEntities: true,
       synchronize: true,
+      logging: ['query', 'error'],
     }),
     UserModule,
     DeviceModule,
