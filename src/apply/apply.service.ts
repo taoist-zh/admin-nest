@@ -44,7 +44,7 @@ export class ApplyService {
         applyStatus: dto.applyStatus,
         description: dto.description,
       };
-      //如果dto.status=2，需要往使用记录/维修记录/报废表里增加数据
+      //如果dto.applyStatus=2，需要往使用记录/维修记录/报废表里增加数据
       if ((dto.applyStatus = 2)) {
         const { userId, deviceId } = result[0];
         switch (result[0].applyType) {
@@ -105,10 +105,16 @@ export class ApplyService {
 
     const data = await this.connection.query(`
     SELECT
-	*,
-	user.username AS username,
-	device.name AS name,
-  device.imgUrl as imgUrl 
+    apply.id AS id,
+    apply.userId AS userId,
+    apply.deviceId AS deviceId,
+    apply.applyType AS applyType,
+    apply.applyStatus AS applyStatus,
+    apply.description AS description,
+    apply.time AS time,
+    user.username AS username,
+    device.name AS name,
+    device.imgUrl AS imgUrl 
 FROM
 	apply
 	LEFT JOIN user ON apply.userId = user.id
