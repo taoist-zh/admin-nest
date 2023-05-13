@@ -36,12 +36,26 @@ export class DeviceController {
     return this.deviceService.update(dto);
   }
   //查询设备
-  @Get('')
+  @Get('/user')
   async query(@Query() query) {
+    return await this.deviceService.findUser(query.id);
+  }
+  //模糊查询设备
+  @Get('like')
+  async query2(@Query() query) {
+    if (!query.attr) {
+      return await this.deviceService.findLike(query);
+    } else {
+      return await this.deviceService.findLikeAttr(query);
+    }
+  }
+  //查询设备使用者
+  @Get('')
+  async query1(@Query() query) {
     if (!query.id) {
       return await this.deviceService.findAll(query);
     } else {
-      return await this.deviceService.findOne(query.id);
+      return await this.deviceService.findLikeAttr(query);
     }
   }
   //上传图片

@@ -1,12 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeviceEntity } from './device.entity';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ApplyEntity } from 'src/apply/apply.entity';
+import { UseEntity } from 'src/record/use/use.entity';
 @Injectable()
 export class DeviceService {
   constructor(
     @InjectRepository(DeviceEntity)
     private deviceRepository: Repository<DeviceEntity>,
+    @InjectRepository(ApplyEntity)
+    private applyRepository: Repository<ApplyEntity>,
+    @InjectRepository(UseEntity)
+    private useRepository: Repository<UseEntity>,
+    private connection: Connection,
   ) {}
   //增加
   async add(dto) {
@@ -30,6 +37,8 @@ export class DeviceService {
 
   //删除设备
   async del(id) {
+    //删除设备相关申请
+    await this.applyRepository.delete({ deviceId: id });
     const data = await this.deviceRepository.delete({ id });
     if (data.affected == 0) {
       return {
@@ -76,6 +85,52 @@ export class DeviceService {
       code: 200,
       meaasge: '查询成功',
       data: result,
+    };
+  }
+  async findUser(id) {
+    if (id) {
+      //从使用记录里找没有使用结束日期的
+      const res = await this.connection.query(`
+      SELECT user.username from \`use\` LEFT JOIN user ON \`use\`.userId=user.id
+        WHERE \`use\`.endTime is null AND \`use\`.deviceId=${id}
+
+      `);
+      return {
+        code: 200,
+        data: res,
+        message: '查询成功',
+      };
+    } else {
+      return {
+        code: 400,
+        message: '缺少id',
+      };
+    }
+  }
+  async findLike(query) {
+    const data = await this.connection.query(
+      `
+      SELECT * from device
+      WHERE name like "%${query.name}%"
+      `,
+    );
+    return {
+      code: 200,
+      message: '查询成功',
+      data: data,
+    };
+  }
+  async findLikeAttr(query) {
+    const data = await this.connection.query(
+      `
+      SELECT * from device
+      WHERE attr like '%${query.attr}%'
+      `,
+    );
+    return {
+      code: 200,
+      message: '查询成功',
+      data: data,
     };
   }
 }
