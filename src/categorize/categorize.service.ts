@@ -2,15 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategorizeEntity } from './categorize.entity';
 import { Repository } from 'typeorm';
+import { DeviceEntity } from 'src/device/device.entity';
 
 @Injectable()
 export class CategorizeService {
   constructor(
     @InjectRepository(CategorizeEntity)
     private categorizeRepository: Repository<CategorizeEntity>,
+    @InjectRepository(DeviceEntity)
+    private deviceRepository: Repository<DeviceEntity>,
   ) {}
- //增加
- async add(dto) {
+  //增加
+  async add(dto) {
     console.log(dto);
     // this.deviceRepository.save()
     if (!dto.name) {
@@ -31,11 +34,13 @@ export class CategorizeService {
 
   //删除设备
   async del(id) {
+    //如果该分类下存在数据
+    await this.deviceRepository.delete({ categorizeId: id });
     const data = await this.categorizeRepository.delete({ id });
     if (data.affected == 0) {
       return {
         code: 401,
-        message: '设备不存在',
+        message: '分类不存在',
       };
     } else {
       return {
