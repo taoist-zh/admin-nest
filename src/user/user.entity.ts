@@ -30,7 +30,6 @@ export class UserEntity {
 
   @Column({ default: 'student' })
   role: string;
-  user: any;
 
   @BeforeInsert()
   async hashPassword() {

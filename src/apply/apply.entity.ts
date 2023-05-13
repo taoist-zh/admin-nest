@@ -11,6 +11,7 @@ export class ApplyEntity {
   @Column()
   deviceId: number;
 
+  //1.使用 2。维修 3报废
   @Column()
   applyType: number;
 

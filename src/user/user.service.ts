@@ -1,6 +1,6 @@
 import { Delete, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { Not, Repository, getRepository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRO } from './user.interface';
@@ -62,7 +62,9 @@ export class UserService {
   }
   //获取所有用户信息
   async findAll(): Promise<UserEntity[]> {
-    const data = await this.usersRepository.find();
+    const data = await this.usersRepository.findBy({
+      role: 'student',
+    });
     console.log(data);
     return data;
   }
@@ -84,7 +86,7 @@ export class UserService {
       ...dto,
     };
     delete updated.id;
-    let result = await this.usersRepository.update({ id: dto.id }, updated);
+    const result = await this.usersRepository.update({ id: dto.id }, updated);
     return {
       code: result.affected > 0 ? 200 : 401,
       message: result.affected > 0 ? '修改成功' : '修改失败',

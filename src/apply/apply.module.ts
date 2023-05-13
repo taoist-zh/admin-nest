@@ -6,6 +6,7 @@ import { UseEntity } from '../record/use/use.entity';
 import { MaintenanceEntity } from '../record/maintenance/maintenance.entity';
 import { UnableUseEntity } from '../record/unable-use/unableUse.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DeviceEntity } from 'src/device/device.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -13,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       UseEntity,
       MaintenanceEntity,
       UnableUseEntity,
+      DeviceEntity,
     ]),
   ],
   controllers: [ApplyController],
