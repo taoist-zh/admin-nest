@@ -28,13 +28,13 @@ export class ApplyService {
     //判断设备是否在使用
     const toUpdate = await this.deviceRepository.findBy({ id: dto.deviceId });
     //0未使用，1.使用中，2.维修中，3.报废 4.待审核
-    if (toUpdate[0] != undefined && toUpdate[0].status == '1') {
-      return {
-        code: 400,
-        message: '设备使用中',
-        // data: data,
-      };
-    }
+    // if (toUpdate[0] != undefined && toUpdate[0].status == '1') {
+    //   return {
+    //     code: 400,
+    //     message: '设备使用中',
+    //     // data: data,
+    //   };
+    // }
     //如果存在相同申请，申请不成功
     const res = await this.applyRepository.findBy({
       deviceId: dto.deviceId,
