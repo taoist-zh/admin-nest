@@ -157,6 +157,16 @@ export class ApplyService {
               deviceId: deviceId,
               time: new Date(),
             });
+            const result1 = await this.useRepository.findBy({
+              userId: userId,
+              deviceId: deviceId,
+            });
+
+            //使用记录更新使用时间
+            await this.useRepository.save({
+              ...result1[0],
+              endTime: new Date(),
+            });
             break;
           case 4:
             //更改设备状态

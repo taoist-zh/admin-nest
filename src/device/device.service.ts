@@ -91,7 +91,7 @@ export class DeviceService {
     if (id) {
       //从使用记录里找没有使用结束日期的
       const res = await this.connection.query(`
-      SELECT user.username from \`use\` LEFT JOIN user ON \`use\`.userId=user.id
+      SELECT user.username,user.id from \`use\` LEFT JOIN user ON \`use\`.userId=user.id
         WHERE \`use\`.endTime is null AND \`use\`.deviceId=${id}
 
       `);
