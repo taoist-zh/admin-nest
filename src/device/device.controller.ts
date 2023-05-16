@@ -49,6 +49,20 @@ export class DeviceController {
       return await this.deviceService.findLikeAttr(query);
     }
   }
+  //查询个人名下设备（使用、维修、报废）
+  @Get('/foruser')
+  async query3(@Query() query) {
+    if (query.type == 1) {
+      //查找使用记录，使用中
+      return await this.deviceService.findUse(query);
+    } else if (query.type == 2) {
+      //查找维修记录
+      return await this.deviceService.findUnable(query);
+    } else if (query.type == 3) {
+      //查找报废记录
+      return await this.deviceService.findDisable(query);
+    }
+  }
   //查询设备使用者
   @Get('')
   async query1(@Query() query) {

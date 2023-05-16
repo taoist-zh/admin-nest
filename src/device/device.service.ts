@@ -120,6 +120,51 @@ export class DeviceService {
       data: data,
     };
   }
+  //查询个人使用中设备
+  async findUse(query) {
+    const data = await this.connection.query(
+      `
+      SELECT device.*,\`use\`.startTime as time from \`use\`
+      LEFT JOIN device ON device.id= \`use\`.deviceId
+      where \`use\`.userId=${query.userId} and \`use\`.endTime is null
+      `,
+    );
+    return {
+      code: 200,
+      message: '查询成功',
+      data: data,
+    };
+  }
+  //查询个人申请的维修的设备
+  async findUnable(query) {
+    const data = await this.connection.query(
+      `
+      SELECT device.*, maintenance.time as time  from maintenance
+      LEFT JOIN device ON device.id= maintenance.deviceId
+      where maintenance.userId=${query.userId} 
+      `,
+    );
+    return {
+      code: 200,
+      message: '查询成功',
+      data: data,
+    };
+  }
+  //查询个人申请报废的设备
+  async findDisable(query) {
+    const data = await this.connection.query(
+      `
+      SELECT device.*,unableUse.time as time from unableUse
+      LEFT JOIN device ON device.id= unableUse.deviceId
+      where unableUse.userId=${query.userId} 
+      `,
+    );
+    return {
+      code: 200,
+      message: '查询成功',
+      data: data,
+    };
+  }
   async findLikeAttr(query) {
     const data = await this.connection.query(
       `
