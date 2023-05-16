@@ -69,7 +69,7 @@ export class DeviceController {
     if (!query.id) {
       return await this.deviceService.findAll(query);
     } else {
-      return await this.deviceService.findLikeAttr(query);
+      return await this.deviceService.findOne(query);
     }
   }
   //上传图片

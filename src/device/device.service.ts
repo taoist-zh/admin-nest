@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DeviceEntity } from './device.entity';
-import { Repository, Connection } from 'typeorm';
+import { Repository, Connection, IsNull } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApplyEntity } from 'src/apply/apply.entity';
 import { UseEntity } from 'src/record/use/use.entity';
@@ -72,7 +72,13 @@ export class DeviceService {
     };
   }
   async findAll(dto) {
+    if (!dto.categorizeId) {
+      dto.categorizeId = IsNull();
+      // const result = await this.deviceRepository.findBy(dto);
+    }
     const result = await this.deviceRepository.findBy(dto);
+
+    console.log(result, 'result');
     return {
       code: 200,
       meaasge: '查询成功',
