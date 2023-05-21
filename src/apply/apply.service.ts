@@ -56,7 +56,7 @@ export class ApplyService {
       //更改设备状态
       const updated = {
         ...toUpdate[0],
-        status: '5', //5是待使用
+        status: '4', //4是已经有人申请
       };
       delete updated.id;
       const result = await this.deviceRepository.update(
@@ -174,11 +174,11 @@ export class ApplyService {
               ...toUpdate[0],
               status: '3',
             };
-            delete updated2.id;
+            delete updated3.id;
             await this.deviceRepository.update({ id: deviceId1 }, updated3);
             //其他设备相关申请，自动驳回
             await this.connection.query(`
-            UPDATE apply SET applyStatus=3 WHERE deviceId=${deviceId1};
+            UPDATE apply SET applyStatus=3 WHERE deviceId=${deviceId1} and applyType=4;
             `);
             await this.unableUseRepository.save({
               userId: userId,
@@ -191,7 +191,7 @@ export class ApplyService {
       }
       return {
         code: 200,
-        message: '更新成功',
+        message: '操作成功',
         data: await this.applyRepository.save(data),
       };
     }
