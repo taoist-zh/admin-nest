@@ -40,6 +40,7 @@ export class ApplyService {
       deviceId: dto.deviceId,
       applyType: dto.applyType,
       userId: dto.userId,
+      applyStatus: Not(2),
     });
     if (res[0] != undefined) {
       return {
